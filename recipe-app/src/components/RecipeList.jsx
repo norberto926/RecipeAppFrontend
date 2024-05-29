@@ -2,12 +2,23 @@ import React, {useState, useEffect} from "react";
 import { fetchRecipes } from "../services/api";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Button from 'react-bootstrap/Button';
+import { Button, Modal } from "react-bootstrap";
+import RecipeDetail from "./RecipeDetail";
+
 
 
 const RecipeList = () => {
 
+    const [show, setShow] = useState(false)
     const [recipes, setRecipes] = useState([])
+    const [recipeId, setRecipeId] = useState(null)
+
+
+    const handleClose = () => setShow(false) 
+    const handleViewRecipe = (id) => {
+        setRecipeId(id)
+        setShow(true)
+    }
 
     useEffect(() => {
         fetchRecipes()
@@ -37,12 +48,27 @@ return (
                         <ListGroup.Item>Fat: {recipe.total_fat}</ListGroup.Item>
                     </ListGroup>  
                     <Card.Body>
-                        <Button variant="primary">Details</Button>
+                        <Button variant="primary" onClick={() => handleViewRecipe(recipe.id)}>Details</Button>
                         <Button variant="primary">Edit</Button>
                         <Button variant="primary">Delete</Button>
                     </Card.Body>
                 </Card>
             ))}
+            
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Recipe Details</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {recipeId && <RecipeDetail id={recipeId} />}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
         </div>
     </div>
 )}
