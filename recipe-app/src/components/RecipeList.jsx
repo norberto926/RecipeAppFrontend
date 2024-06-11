@@ -7,17 +7,27 @@ import RecipeDetail from "./RecipeDetail";
 
 
 
+
 const RecipeList = () => {
 
-    const [show, setShow] = useState(false)
+    const [showDetails, setShowDetails] = useState(false)
+    const [showEdit, setShowEdit] = useState(false)
     const [recipes, setRecipes] = useState([])
     const [recipeId, setRecipeId] = useState(null)
 
 
-    const handleClose = () => setShow(false) 
-    const handleViewRecipe = (id) => {
+    const handleClose = () => {
+        setShowDetails(false) 
+        setShowEdit(false)
+    }
+    const handleViewRecipe = (id, action) => {
         setRecipeId(id)
-        setShow(true)
+        if (action == "details") {
+            setShowDetails(true)
+        }
+        if (action == "edit"){
+            setShowEdit(true)
+        }
     }
 
     useEffect(() => {
@@ -49,18 +59,32 @@ return (
                     </ListGroup>  
                     <Card.Body>
                         <Button variant="primary" onClick={() => handleViewRecipe(recipe.id)}>Details</Button>
-                        <Button variant="primary">Edit</Button>
+                        <Button variant="primary" onClick={() => handleEditRecipe(recipe.id)}>Edit</Button>
                         <Button variant="primary">Delete</Button>
                     </Card.Body>
                 </Card>
             ))}
             
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={showDetails} onHide={handleClose}  dialogClassName="">
                 <Modal.Header closeButton>
                     <Modal.Title>Recipe Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {recipeId && <RecipeDetail id={recipeId} />}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showEdit} onHide={handleClose}  dialogClassName="">
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Reipe</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {recipeId && <RecipeEdit id={recipeId} />}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
