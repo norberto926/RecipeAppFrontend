@@ -9,6 +9,31 @@ export const fetchRecipes = async () => {
     return response.json()
 }
 
+export const deleteRecipe = async (recipeId) => {
+  const response = await fetch(`${API_BASE_URL}/recipes/${recipeId}/`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error('Failed to delete recipe');
+  }
+  const text = await response.text();
+  const data = text ? JSON.parse(text) : {};
+
+  return data;
+}
+
+export const createRecipe = async (formData) => {
+  const response = await fetch(`${API_BASE_URL}/recipes/`,{
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create recipe');
+  }
+  return response.json();
+}
+
 export const fetchRecipe = async (id) => {
 
     const response = await fetch(`${API_BASE_URL}/recipes/${id}/`)
@@ -20,24 +45,70 @@ export const fetchRecipe = async (id) => {
 
 }
 
-export const updateRecipe = async (id, recipe) => {
-    const response = await fetch(`${API_BASE_URL}/recipes/${id}/`, 
-    {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(recipe)
+export const updateRecipe = async (recipeId, formData) => {
+  const response = await fetch(`${API_BASE_URL}/recipes/${recipeId}/`, {
+    method: 'PUT',
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error('Failed to update recipe');
+  }
+  return response.json();
+};
 
-    }
-    )
-
+export const updateRecipeIngredient = async (recipeIngredientId, data) => {
+    const response = await fetch(`${API_BASE_URL}/recipe-ingredients/${recipeIngredientId}/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
     if (!response.ok) {
-        throw new Error('Failed to update recipe')
+      throw new Error('Failed to update recipe');
     }
+    return response.json();
+  };
+  
+  export const deleteRecipeIngredient = async (recipeIngredientId) => {
+    const response = await fetch(`${API_BASE_URL}/recipe-ingredients/${recipeIngredientId}/`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete ingredient');
+    }
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
 
-    return response.json()
-}
+    return data;
+  };
+
+  export const deleteIngredient = async (ingredientId) => {
+    const response = await fetch(`${API_BASE_URL}/ingredients/${ingredientId}/`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete ingredient');
+    }
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
+
+    return data;
+  };
+  
+  export const createRecipeIngredient = async (data) => {
+    const response = await fetch(`${API_BASE_URL}/recipe-ingredients/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to create ingredient');
+    }
+    return response.json();
+  };
 
 export const fetchIngredients = async () => {
     const response = await fetch(`${API_BASE_URL}/ingredients/`)
@@ -47,3 +118,38 @@ export const fetchIngredients = async () => {
     }
     return response.json()
 }
+
+export const createIngredient = async (formData) => {
+  const response = await fetch(`${API_BASE_URL}/ingredients/`,{
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to create recipe');
+  }
+  return response.json();
+}
+
+export const fetchIngredient = async (id) => {
+
+  const response = await fetch(`${API_BASE_URL}/ingredients/${id}/`)
+
+  if (!response.ok) {
+      throw new Error('Ingredient details endpoint failed')
+  }
+  return response.json()
+
+}
+
+export const updateIngredient = async (ingredientId, formData) => {
+  const response = await fetch(`${API_BASE_URL}/ingredients/${ingredientId}/`, {
+    method: 'PUT',
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error('Failed to update ingredient');
+  }
+  return response.json();
+};
+

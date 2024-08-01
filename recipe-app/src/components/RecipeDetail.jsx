@@ -1,52 +1,91 @@
-import React, {useState, useEffect} from "react";
-import { fetchRecipe } from "../services/api";
-import Card from 'react-bootstrap/Card';
-import { ListGroup } from "react-bootstrap";
+import { useState, useEffect } from 'react';
+import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { fetchIngredients, updateRecipe, deleteRecipeIngredient, createRecipeIngredient, fetchRecipe} from '../services/api';
 
-
-
-
-
-const RecipeDetail = ({id}) => {
-
-    const [recipe, setRecipe] = useState(null)
+const RecipeEdit = ({ show, handleClose, recipeId}) => {
+    const [recipe, setRecipe] = useState(null);
+    const [ingredients, setIngredients] = useState([]);
+    const [RecipeIngredients, setRecipeIngredients] = useState([]);
 
     useEffect(() => {
-        fetchRecipe(id)
+        fetchRecipe(recipeId)
             .then(data => {
-                setRecipe(data)
+                console.log('Fetched recipe:', data);
+                setRecipe(data);
+                setRecipeIngredients(data.recipe_ingredients || []);
             })
             .catch(error => {
-                console.error('There was an error fetching the recipe!', error)
-            })
-    }, [id])
+                console.error('There was an error fetching the recipe!', error);
+            });
+    }, [recipeId]);
 
-    if (!recipe) {
-      return <div>Loading...</div>
+    useEffect(() => {
+        fetchIngredients().then(data => {
+            setIngredients(data);
+        });
+    }, []);
+
+
+
+    const calculateSummary = () => {
+        console.log(RecipeIngredients)
+        const summary = RecipeIngredients.reduce((acc, recipeIngredient) => {
+            const ingredientDetails = getIngredientDetails(recipeIngredient.ingredient);
+            acc.protein += (ingredientDetails.protein * recipeIngredient.quantity) / 100;
+            acc.carbohydrates += (ingredientDetails.carbohydrates * recipeIngredient.quantity) / 100;
+            acc.fat += (ingredientDetails.fat * recipeIngredient.quantity) / 100;
+            acc.calories += ((ingredientDetails.protein * 4 + ingredientDetails.carbohydrates * 4 + ingredientDetails.fat * 9) * recipeIngredient.quantity) / 100;
+            return acc;
+        }, { protein: 0, carbohydrates: 0, fat: 0, calories: 0 });
+        return summary;
+    };
+
+    const getIngredientDetails = (id) => {
+        return ingredients.find(ingredient => ingredient.id === id);
+      };
+
+    const summary = calculateSummary();
+
+
+      if (recipe){
+
+    return (
+        <Modal show={show} onHide={handleClose} size="lg">
+            <Modal.Header closeButton>
+                <Modal.Title>Recipe Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <img src={recipe.photo} width='100%'></img>
+                <h1>{recipe.name}</h1>
+                <p>{recipe.description}</p>
+                <h3>Ingredients:</h3>
+                    {RecipeIngredients.map((recipeIngredient, index) => {
+                        const ingredientDetails = getIngredientDetails(recipeIngredient.ingredient);
+                        return(
+                        <Row key={index} className="align-items-center mb-2">
+                            <Col xs={6}>
+                                <p>{ingredientDetails.name}</p>
+                            </Col>
+                            <Col xs={3}>
+                                <p>{recipeIngredient.quantity} g</p>
+                            </Col>
+                        </Row>
+                    )})}
+
+                    <h5>Recipe Summary</h5>
+                    <p>Protein: {summary.protein}g</p>
+                    <p>Carbohydrates: {summary.carbohydrates}g</p>
+                    <p>Fat: {summary.fat}g</p>
+                    <p>Calories: {summary.calories}kcal</p>
+  
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>Close</Button>
+            </Modal.Footer>
+        </Modal>
+    );} else {
+        return <div>Loading...</div>
     }
-    else {
+};
 
-    return ( 
-      <Card style={{ width: '40rem' }} key={recipe.id}>
-      <Card.Body>
-          <Card.Title>{recipe.name}</Card.Title>
-          <Card.Subtitle>{recipe.category}</Card.Subtitle>
-      </Card.Body>
-      <ListGroup className="list-group-flush">
-          <ListGroup.Item>Calories: {recipe.total_calories}</ListGroup.Item>
-          <ListGroup.Item>Protein: {recipe.total_protein}</ListGroup.Item>
-          <ListGroup.Item>Carbohydrates: {recipe.total_carbohydrates}</ListGroup.Item>
-          <ListGroup.Item>Fat: {recipe.total_fat}</ListGroup.Item>
-      </ListGroup>
-      <ListGroup className="list-group-flush">
-        {recipe.recipe_ingredients.map(ingredient => (
-            <ListGroup.Item key={ingredient.id}>{ingredient.ingredient.name} {ingredient.quantity} g</ListGroup.Item>
-        ))}
-          
-      </ListGroup>   
-  </Card>
-    )}
-
-}
-
-export default RecipeDetail
+export default RecipeEdit;

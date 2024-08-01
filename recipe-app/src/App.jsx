@@ -1,7 +1,7 @@
-import React from "react"
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom'
 import RecipeList from "./components/RecipeList"
-import RecipeDetail from "./components/RecipeDetail";
+import IngredientList from "./components/IngredientList";
+import AppNavbar from './components/AppNavbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'; 
 
@@ -10,10 +10,12 @@ function App() {
   return (
     <>
       <Router>
+        <AppNavbar/>
         <div>
           <Routes>
-            <Route path="/" element={<RecipeList/>}/>
-            <Route path="/recipes/:id" element={<RecipeDetail />} />
+            <Route path="/" element={<Navigate to="/recipes"/>}/>
+            <Route path="/recipes" element={<RecipeList/>}/>
+            <Route path="/ingredients" element={<IngredientList/>}/>
           </Routes>
         </div>
       </Router>
