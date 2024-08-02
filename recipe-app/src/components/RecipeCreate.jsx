@@ -11,6 +11,7 @@ const RecipeCreate = ({ show, handleClose }) => {
     const [recipeName, setRecipeName] = useState("");
     const [recipeDescription, setRecipeDescription] = useState("");
     const [photo, setPhoto] = useState(null);
+    const [existingRecipeError, setExistingRecipeError] = useState("");
 
     useEffect(() => {
         fetchIngredients().then(data => {
@@ -42,6 +43,13 @@ const RecipeCreate = ({ show, handleClose }) => {
 
     const handleAddRecipeIngredient = () => {
         if (newRecipeIngredientIngredient && newRecipeIngredientQuantity) {
+
+            const ingredientExists = recipeIngredients.some(recipeIngredient => recipeIngredient.ingredient === parseInt(newRecipeIngredientIngredient));
+        
+            if (ingredientExists) {
+                setExistingRecipeError("Ingredient already exists in the recipe.");
+                return;
+            }
             setRecipeIngredients(prevRecipeIngredients => [
                 ...prevRecipeIngredients, 
                 { recipe: Date.now(), ingredient: parseInt(newRecipeIngredientIngredient), quantity: parseInt(newRecipeIngredientQuantity), id: Date.now() }
@@ -130,6 +138,9 @@ const RecipeCreate = ({ show, handleClose }) => {
                         <Form.Label>Recipe Description</Form.Label>
                         <Form.Control
                             type="text"
+                            as="textarea"
+                            rows={7}
+                            cols={50}
                             value={recipeDescription}
                             onChange={handleRecipeDescriptionChange}
                             placeholder='Enter recipe description'
@@ -172,6 +183,9 @@ const RecipeCreate = ({ show, handleClose }) => {
                 </Form>
                 <Form>
                     <h5>Add new ingredient</h5>
+                    <Row>
+                        <p className="text-danger">{existingRecipeError}</p>
+                    </Row>
                     <Row className="align-items-center mb-2">
                         <Col xs={6}>
                             <Form.Control

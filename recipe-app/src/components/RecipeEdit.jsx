@@ -3,7 +3,7 @@ import { Modal, Button, Form, Row, Col, Image } from 'react-bootstrap';
 import { fetchIngredients, updateRecipe, deleteRecipeIngredient, createRecipeIngredient, fetchRecipe, updateRecipeIngredient} from '../services/api';
 import { useDropzone } from 'react-dropzone';
 
-const RecipeEdit = ({ show, handleClose, recipeId}) => {
+const RecipeEdit = ({ show, handleClose, recipeId, onSave}) => {
     const [recipe, setRecipe] = useState(null);
     const [ingredients, setIngredients] = useState([]);
     const [RecipeIngredients, setRecipeIngredients] = useState([]);
@@ -16,6 +16,7 @@ const RecipeEdit = ({ show, handleClose, recipeId}) => {
     const [recipeDescription, setRecipeDescription] = useState("");
     const [photo, setPhoto] = useState(null);
     const [currentPhoto, setCurrentPhoto] = useState(null)
+    const [existingRecipeError, setExistingRecipeError] = useState("");
 
     useEffect(() => {
         fetchRecipe(recipeId)
@@ -86,6 +87,14 @@ const RecipeEdit = ({ show, handleClose, recipeId}) => {
     
     const handleAddRecipeIngredient = () => {
         if ( newRecipeIngredientIngredient && newRecipeIngredientQuantity ) {
+
+            const ingredientExists = RecipeIngredients.some(recipeIngredient => recipeIngredient.ingredient === parseInt(newRecipeIngredientIngredient));
+        
+            if (ingredientExists) {
+                setExistingRecipeError("Ingredient already exists in the recipe.");
+                return;
+            }
+            
             setRecipeIngredients(prevRecipeIngredients => [
                 ...prevRecipeIngredients, 
                 { recipe: recipeId, ingredient: parseInt(newRecipeIngredientIngredient), quantity: parseInt(newRecipeIngredientQuantity), id: Date.now() }
@@ -93,6 +102,7 @@ const RecipeEdit = ({ show, handleClose, recipeId}) => {
             setNewRecipeIngredients([...newRecipeIngredients, { recipe: recipeId, ingredient: parseInt(newRecipeIngredientIngredient), quantity: parseInt(newRecipeIngredientQuantity), id: Date.now()}]);
             setNewRecipeIngredientIngredient("");
             setNewRecipeIngredientQuantity("")
+            setExistingRecipeError("")
         }
     };
 
@@ -128,9 +138,6 @@ const RecipeEdit = ({ show, handleClose, recipeId}) => {
 
     const summary = calculateSummary();
     const handleSave = async () => {
-        
-        console.log("Recipe ingredients:", RecipeIngredients)
-        console.log("Updated recipe ingredients:", updatedRecipeIngredients)
 
         const formData = new FormData();
         formData.append('name', recipeName);
@@ -175,7 +182,7 @@ const RecipeEdit = ({ show, handleClose, recipeId}) => {
           };
           createRecipeIngredient(newIngredientData)
         });
-    
+        onSave()
         handleClose();
 
       };
@@ -202,6 +209,9 @@ const RecipeEdit = ({ show, handleClose, recipeId}) => {
                 <Form.Label>Recipe Description</Form.Label>
                 <Form.Control
                     type="text"
+                    as="textarea"
+                    rows={7}
+                    cols={50}
                     value={recipeDescription}
                     onChange={handleRecipeDescriptionChange}
                     placeholder='Enter recipe description'
@@ -216,7 +226,7 @@ const RecipeEdit = ({ show, handleClose, recipeId}) => {
                         }
                     </div>
                     {photo && <p>Selected photo: {photo.name}</p>}
-                    <Image src={currentPhoto} fluid/>
+                    <Image src={currentPhoto} height="200" fluid/>
                     {RecipeIngredients.map((recipeIngredient, index) => {
                         const ingredientDetails = getIngredientDetails(recipeIngredient.ingredient);
                         return(
@@ -245,6 +255,9 @@ const RecipeEdit = ({ show, handleClose, recipeId}) => {
                 </Form>
                 <Form>
                     <h5>Add new ingredient</h5>
+                    <Row>
+                        <p className="text-danger">{existingRecipeError}</p>
+                    </Row>
                     <Row className="align-items-center mb-2">
                         <Col xs={6}>
                             <Form.Control

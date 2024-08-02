@@ -43,15 +43,19 @@ const RecipeList = () => {
         
     }
 
-    useEffect(() => {
+    const fetchAndUpdateRecipes = () => {
         fetchRecipes()
             .then(data => {
-                setRecipes(data)
+                setRecipes(data);
             })
-    .catch(error => {
-        console.error('There was an error fetching the recipes!', error);
-    })
-}, [showEdit, showCreate])
+            .catch(error => {
+                console.error('There was an error fetching the recipes!', error);
+            });
+    };
+
+    useEffect(() => {
+        fetchAndUpdateRecipes();
+    }, [showCreate]);
 
 
 return (
@@ -62,7 +66,7 @@ return (
         {recipes.map(recipe => (
             <Col md={4} key={recipe.id}>
                 <Card style={{ marginBottom: '20px' }}>
-                    <Card.Img variant="top" src={recipe.photo} alt={`${recipe.name} photo`} />
+                    <Card.Img variant="top" src={recipe.photo} height="270" alt={`${recipe.name} photo`} />
                     <Card.Body>
                         <Card.Title>{recipe.name}</Card.Title>
                         <Card.Subtitle>{recipe.category}</Card.Subtitle>
@@ -83,7 +87,7 @@ return (
         ))}
     </Row>
     {showDetails && <RecipeDetail show={showDetails} handleClose={handleClose} recipeId={recipeId}/>}
-    {showEdit && <RecipeEdit show={showEdit} handleClose={handleClose} recipeId={recipeId} />}
+    {showEdit && <RecipeEdit show={showEdit} handleClose={handleClose} recipeId={recipeId} onSave={fetchAndUpdateRecipes}/>}
     {showCreate && <RecipeCreate show={showCreate} handleClose={handleClose} />}
 </Container>
 )}
