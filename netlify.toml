@@ -1,8 +1,3 @@
-[build]
-  base = "recipe-app"
-  publish = "recipe-app"
-  command = "npm run build"
-
 [[headers]]
   for = "/*.js"
   [headers.values]
