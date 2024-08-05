@@ -1,0 +1,9 @@
+[build]
+  base = "recipe app"
+  publish = "recipe app/build"
+  command = "npm run build"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Content-Type = "application/javascript"
