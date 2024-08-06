@@ -86,7 +86,7 @@ return (
             </Col>
         ))}
     </Row>
-    {showDetails && <RecipeDetail show={showDetails} handleClose={handleClose} recipeId={recipeId}/>}
+    {showDetails && <RecipeDetail show={showDetails} handleClose={handleClose} recipeId={recipeId} onSave={fetchAndUpdateRecipes}/>}
     {showEdit && <RecipeEdit show={showEdit} handleClose={handleClose} recipeId={recipeId} onSave={fetchAndUpdateRecipes}/>}
     {showCreate && <RecipeCreate show={showCreate} handleClose={handleClose} />}
 </Container>

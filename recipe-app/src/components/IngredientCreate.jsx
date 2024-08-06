@@ -5,10 +5,10 @@ import { useDropzone } from 'react-dropzone';
 
 const IngredientCreate = ({ show, handleClose }) => {
     const [ingredientName, setIngredientName] = useState("");
-    const [photo, setPhoto] = useState(null);
-    const [protein, setProtein] = useState(null)
-    const [carbohydrates, setCarbohydrates] = useState(null)
-    const [fat, setFat] = useState(null)
+    const [photo, setPhoto] = useState("");
+    const [protein, setProtein] = useState("")
+    const [carbohydrates, setCarbohydrates] = useState("")
+    const [fat, setFat] = useState("")
 
 
     const handleIngredientNameChange = (e) => {
