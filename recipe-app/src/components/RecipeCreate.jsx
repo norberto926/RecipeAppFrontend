@@ -3,7 +3,7 @@ import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { createRecipeIngredient, createRecipe } from '../services/api';
 import { useDropzone } from 'react-dropzone';
 
-const RecipeCreate = ({ show, handleClose, ingredients}) => {
+const RecipeCreate = ({ show, handleClose, ingredients }) => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [newRecipeIngredientIngredient, setNewRecipeIngredientIngredient] = useState("");
     const [newRecipeIngredientQuantity, setNewRecipeIngredientQuantity] = useState("");
@@ -13,7 +13,6 @@ const RecipeCreate = ({ show, handleClose, ingredients}) => {
     const [existingRecipeError, setExistingRecipeError] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
 
-
     const handleDelete = (id) => {
         setRecipeIngredients(prevRecipeIngredients => 
             prevRecipeIngredients.filter(recipeIngredient => recipeIngredient.id !== id)
@@ -21,10 +20,9 @@ const RecipeCreate = ({ show, handleClose, ingredients}) => {
     };
 
     const handleNewIngredientIngredientChange = (e) => {
-        const value = e.target.value.toLowerCase();
-        setNewRecipeIngredientIngredient(value);
-        setSearchQuery(value); 
+        setNewRecipeIngredientIngredient(e.target.value);
     };
+
     const handleNewIngredientQuantityChange = (e) => {
         setNewRecipeIngredientQuantity(e.target.value);
     };
@@ -37,11 +35,13 @@ const RecipeCreate = ({ show, handleClose, ingredients}) => {
         setRecipeDescription(e.target.value);
     };
 
+    const handleSearchQueryChange = (e) => {
+        setSearchQuery(e.target.value.toLowerCase());
+    };
+
     const handleAddRecipeIngredient = () => {
         if (newRecipeIngredientIngredient && newRecipeIngredientQuantity) {
-
             const ingredientExists = recipeIngredients.some(recipeIngredient => recipeIngredient.ingredient === parseInt(newRecipeIngredientIngredient));
-        
             if (ingredientExists) {
                 setExistingRecipeError("Ingredient already exists in the recipe.");
                 return;
@@ -52,7 +52,6 @@ const RecipeCreate = ({ show, handleClose, ingredients}) => {
             ]);
             setNewRecipeIngredientIngredient("");
             setNewRecipeIngredientQuantity("");
-            setSearchQuery(""); 
         }
     };
 
@@ -195,11 +194,20 @@ const RecipeCreate = ({ show, handleClose, ingredients}) => {
                     <Row className="align-items-center mb-2">
                         <Col xs={6}>
                             <Form.Control
+                                type="text"
+                                placeholder="Search for an ingredient"
+                                value={searchQuery}
+                                onChange={handleSearchQueryChange}
+                            />
+                        </Col>
+                    </Row>
+                    <Row className="align-items-center mb-2">
+                        <Col xs={6}>
+                            <Form.Control
                                 as="select"
                                 name="ingredient"
                                 value={newRecipeIngredientIngredient}
                                 onChange={handleNewIngredientIngredientChange}
-                                placeholder="Start typing to search ingredients"
                             >
                                 <option value="">Select Ingredient</option>
                                 {filteredIngredients.map(ingredient => (
