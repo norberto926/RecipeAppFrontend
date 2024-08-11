@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import { fetchRecipes, deleteRecipe } from "../services/api";
+import { fetchRecipes, deleteRecipe, fetchIngredients } from "../services/api";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Button, Modal, Row, Col, Container } from "react-bootstrap";
@@ -17,6 +17,7 @@ const RecipeList = () => {
     const [showCreate, setShowCreate] = useState(false)
     const [recipes, setRecipes] = useState([])
     const [recipeId, setRecipeId] = useState(null)
+    const [ingredients, setIngredients] = useState(null)
 
 
     const handleClose = () => {
@@ -53,8 +54,19 @@ const RecipeList = () => {
             });
     };
 
+    const fetchAndUpdateIngredients = () => {
+        fetchIngredients()
+            .then(data => {
+                setIngredients(data);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the ingredients!', error);
+            });
+    };
+
     useEffect(() => {
         fetchAndUpdateRecipes();
+        fetchAndUpdateIngredients();
     }, [showCreate]);
 
 
@@ -86,9 +98,9 @@ return (
             </Col>
         ))}
     </Row>
-    {showDetails && <RecipeDetail show={showDetails} handleClose={handleClose} recipeId={recipeId} onSave={fetchAndUpdateRecipes}/>}
-    {showEdit && <RecipeEdit show={showEdit} handleClose={handleClose} recipeId={recipeId} onSave={fetchAndUpdateRecipes}/>}
-    {showCreate && <RecipeCreate show={showCreate} handleClose={handleClose} />}
+    {showDetails && <RecipeDetail show={showDetails} handleClose={handleClose} recipeId={recipeId} onSave={fetchAndUpdateRecipes} ingredients={ingredients}/>}
+    {showEdit && <RecipeEdit show={showEdit} handleClose={handleClose} recipeId={recipeId} onSave={fetchAndUpdateRecipes} ingredients={ingredients}/>}
+    {showCreate && <RecipeCreate show={showCreate} handleClose={handleClose} ingredients={ingredients}/>}
 </Container>
 )}
 

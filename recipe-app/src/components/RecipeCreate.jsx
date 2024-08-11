@@ -1,10 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
-import { fetchIngredients, createRecipeIngredient, createRecipe } from '../services/api';
+import { createRecipeIngredient, createRecipe } from '../services/api';
 import { useDropzone } from 'react-dropzone';
 
-const RecipeCreate = ({ show, handleClose }) => {
-    const [ingredients, setIngredients] = useState([]);
+const RecipeCreate = ({ show, handleClose, ingredients}) => {
     const [recipeIngredients, setRecipeIngredients] = useState([]);
     const [newRecipeIngredientIngredient, setNewRecipeIngredientIngredient] = useState("");
     const [newRecipeIngredientQuantity, setNewRecipeIngredientQuantity] = useState("");
@@ -13,11 +12,6 @@ const RecipeCreate = ({ show, handleClose }) => {
     const [photo, setPhoto] = useState(null);
     const [existingRecipeError, setExistingRecipeError] = useState("");
 
-    useEffect(() => {
-        fetchIngredients().then(data => {
-            setIngredients(data);
-        });
-    }, []);
 
     const handleDelete = (id) => {
         setRecipeIngredients(prevRecipeIngredients => 

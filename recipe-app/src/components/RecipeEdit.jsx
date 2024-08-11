@@ -3,9 +3,8 @@ import { Modal, Button, Form, Row, Col, Image } from 'react-bootstrap';
 import { fetchIngredients, updateRecipe, deleteRecipeIngredient, createRecipeIngredient, fetchRecipe, updateRecipeIngredient } from '../services/api';
 import { useDropzone } from 'react-dropzone';
 
-const RecipeEdit = ({ show, handleClose, recipeId, onSave }) => {
+const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
     const [recipe, setRecipe] = useState(null);
-    const [ingredients, setIngredients] = useState([]);
     const [RecipeIngredients, setRecipeIngredients] = useState([]);
     const [newRecipeIngredientIngredient, setNewRecipeIngredientIngredient] = useState("");
     const [newRecipeIngredientQuantity, setNewRecipeIngredientQuantity] = useState("");
@@ -32,11 +31,6 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave }) => {
             });
     }, [recipeId]);
 
-    useEffect(() => {
-        fetchIngredients().then(data => {
-            setIngredients(data);
-        });
-    }, []);
 
     const handleQuantityChange = (id, newQuantity) => {
         setRecipeIngredients(prevRecipeIngredients =>

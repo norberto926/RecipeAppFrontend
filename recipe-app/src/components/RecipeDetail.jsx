@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import { fetchIngredients, updateRecipe, deleteRecipeIngredient, createRecipeIngredient, fetchRecipe} from '../services/api';
 
-const RecipeEdit = ({ show, handleClose, recipeId}) => {
+const RecipeEdit = ({ show, handleClose, recipeId, ingredients}) => {
     const [recipe, setRecipe] = useState(null);
-    const [ingredients, setIngredients] = useState([]);
     const [RecipeIngredients, setRecipeIngredients] = useState([]);
 
     useEffect(() => {
@@ -19,11 +18,6 @@ const RecipeEdit = ({ show, handleClose, recipeId}) => {
             });
     }, [recipeId]);
 
-    useEffect(() => {
-        fetchIngredients().then(data => {
-            setIngredients(data);
-        });
-    }, []);
 
 
 
