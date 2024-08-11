@@ -21,9 +21,10 @@ const RecipeCreate = ({ show, handleClose, ingredients}) => {
     };
 
     const handleNewIngredientIngredientChange = (e) => {
-        setNewRecipeIngredientIngredient(e.target.value);
+        const value = e.target.value.toLowerCase();
+        setNewRecipeIngredientIngredient(value);
+        setSearchQuery(value); 
     };
-
     const handleNewIngredientQuantityChange = (e) => {
         setNewRecipeIngredientQuantity(e.target.value);
     };
@@ -34,10 +35,6 @@ const RecipeCreate = ({ show, handleClose, ingredients}) => {
 
     const handleRecipeDescriptionChange = (e) => {
         setRecipeDescription(e.target.value);
-    };
-
-    const handleSearchQueryChange = (e) => {
-        setSearchQuery(e.target.value.toLowerCase());
     };
 
     const handleAddRecipeIngredient = () => {
@@ -55,6 +52,7 @@ const RecipeCreate = ({ show, handleClose, ingredients}) => {
             ]);
             setNewRecipeIngredientIngredient("");
             setNewRecipeIngredientQuantity("");
+            setSearchQuery(""); 
         }
     };
 
@@ -197,20 +195,11 @@ const RecipeCreate = ({ show, handleClose, ingredients}) => {
                     <Row className="align-items-center mb-2">
                         <Col xs={6}>
                             <Form.Control
-                                type="text"
-                                placeholder="Search for an ingredient"
-                                value={searchQuery}
-                                onChange={handleSearchQueryChange}
-                            />
-                        </Col>
-                    </Row>
-                    <Row className="align-items-center mb-2">
-                        <Col xs={6}>
-                            <Form.Control
                                 as="select"
                                 name="ingredient"
                                 value={newRecipeIngredientIngredient}
                                 onChange={handleNewIngredientIngredientChange}
+                                placeholder="Start typing to search ingredients"
                             >
                                 <option value="">Select Ingredient</option>
                                 {filteredIngredients.map(ingredient => (
