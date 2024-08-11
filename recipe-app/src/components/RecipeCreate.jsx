@@ -91,25 +91,30 @@ const RecipeCreate = ({ show, handleClose }) => {
 
     const handleSave = async () => {
         try {
+            // Create the recipe first
             const formData = new FormData();
             formData.append('name', recipeName);
             formData.append('description', recipeDescription);
             if (photo) {
                 formData.append('photo', photo);
             }
-
+    
+            // Create the recipe and get the new recipe ID
             const newRecipe = await createRecipe(formData);
-
-            // Create new ingredients
-            recipeIngredients.forEach(ingredient => {
+    
+            const ingredientPromises = recipeIngredients.map(ingredient => {
                 const newIngredientData = {
                     recipe: newRecipe.id,
                     ingredient: ingredient.ingredient,
                     quantity: ingredient.quantity
                 };
-                createRecipeIngredient(newIngredientData);
+                return createRecipeIngredient(newIngredientData);
             });
-
+    
+            // Wait for all ingredient creation promises to resolve
+            await Promise.all(ingredientPromises);
+    
+            // Close the modal after all ingredients are saved
             handleClose();
         } catch (error) {
             console.error('Failed to create recipe or ingredients', error);

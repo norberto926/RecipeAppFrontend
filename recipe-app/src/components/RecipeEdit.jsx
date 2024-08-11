@@ -138,33 +138,39 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave }) => {
         if (photo) {
             formData.append('photo', photo);
         }
-
+    
         try {
+            // Update the recipe
             await updateRecipe(recipeId, formData);
-
-            updatedRecipeIngredients.forEach(async (recipeIngredient) => {
+    
+            // Handle ingredient updates, deletions, and additions
+            const updatePromises = updatedRecipeIngredients.map(async (recipeIngredient) => {
                 const updatedIngredient = {
                     id: recipeIngredient.id,
                     recipe: recipeId,
                     ingredient: recipeIngredient.ingredient,
                     quantity: recipeIngredient.quantity
                 };
-                await updateRecipeIngredient(updatedIngredient.id, updatedIngredient);
+                return updateRecipeIngredient(updatedIngredient.id, updatedIngredient);
             });
-
-            deletedRecipeIngredients.forEach(async (id) => {
-                await deleteRecipeIngredient(id);
+    
+            const deletePromises = deletedRecipeIngredients.map(async (id) => {
+                return deleteRecipeIngredient(id);
             });
-
-            newRecipeIngredients.forEach(async (ingredient) => {
+    
+            const createPromises = newRecipeIngredients.map(async (ingredient) => {
                 const newIngredientData = {
                     recipe: recipeId,
                     ingredient: ingredient.ingredient,
                     quantity: ingredient.quantity
                 };
-                await createRecipeIngredient(newIngredientData);
+                return createRecipeIngredient(newIngredientData);
             });
-
+    
+            // Wait for all promises to resolve
+            await Promise.all([...updatePromises, ...deletePromises, ...createPromises]);
+    
+            // Notify parent component and close modal
             onSave();
             handleClose();
         } catch (error) {
