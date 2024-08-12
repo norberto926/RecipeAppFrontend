@@ -16,6 +16,7 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
     const [photo, setPhoto] = useState(null);
     const [currentPhoto, setCurrentPhoto] = useState(null);
     const [existingRecipeError, setExistingRecipeError] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         fetchRecipe(recipeId)
@@ -73,6 +74,10 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
         setNewRecipeIngredientQuantity(e.target.value);
     };
 
+    const handleSearchQueryChange = (e) => {
+        setSearchQuery(e.target.value.toLowerCase());
+    };
+
     const handleAddRecipeIngredient = () => {
         if (newRecipeIngredientIngredient && newRecipeIngredientQuantity) {
             const ingredientExists = RecipeIngredients.some(recipeIngredient => recipeIngredient.ingredient === parseInt(newRecipeIngredientIngredient));
@@ -100,6 +105,11 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
     const handleRecipeDescriptionChange = (e) => {
         setRecipeDescription(e.target.value);
     };
+
+    const filteredIngredients = ingredients.filter(ingredient =>
+        ingredient.name.toLowerCase().includes(searchQuery)
+    );
+
 
     const onDrop = useCallback((acceptedFiles) => {
         setPhoto(acceptedFiles[0]);
@@ -245,13 +255,23 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
                     <Row className="align-items-center mb-2">
                         <Col xs={6}>
                             <Form.Control
+                                type="text"
+                                placeholder="Search for an ingredient"
+                                value={searchQuery}
+                                onChange={handleSearchQueryChange}
+                            />
+                        </Col>
+                    </Row>
+                    <Row className="align-items-center mb-2">
+                        <Col xs={6}>
+                            <Form.Control
                                 as="select"
                                 name="ingredient"
                                 value={newRecipeIngredientIngredient}
                                 onChange={handleNewIngredientIngredientChange}
                             >
                                 <option value="">Select Ingredient</option>
-                                {ingredients.map(ingredient => (
+                                {filteredIngredients.map(ingredient => (
                                     <option key={ingredient.id} value={ingredient.id}>{ingredient.name}</option>
                                 ))}
                             </Form.Control>
