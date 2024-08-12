@@ -72,8 +72,10 @@ const RecipeList = () => {
 
 return (
     <Container>
-    <h1>Recipes</h1>
-    <Button onClick={() => handleViewRecipe("create")}>Add New Recipe</Button>
+    <div className="header-container">
+        <h1 className="title">Recipes</h1>
+        <Button className="btn btn-primary add-recipe-btn" onClick={() => handleViewRecipe("create")}>Add New Recipe</Button>
+    </div>
     <Row>
         {recipes.map(recipe => (
             <Col md={4} key={recipe.id}>
@@ -84,10 +86,10 @@ return (
                         <Card.Subtitle>{recipe.category}</Card.Subtitle>
                     </Card.Body>
                     <ListGroup className="list-group-flush">
-                        <ListGroup.Item>Calories: {recipe.total_calories}</ListGroup.Item>
-                        <ListGroup.Item>Protein: {recipe.total_protein}</ListGroup.Item>
-                        <ListGroup.Item>Carbohydrates: {recipe.total_carbohydrates}</ListGroup.Item>
-                        <ListGroup.Item>Fat: {recipe.total_fat}</ListGroup.Item>
+                        <ListGroup.Item>Calories: {recipe.total_calories} kcal</ListGroup.Item>
+                        <ListGroup.Item>Protein: {recipe.total_protein} g</ListGroup.Item>
+                        <ListGroup.Item>Carbohydrates: {recipe.total_carbohydrates} g</ListGroup.Item>
+                        <ListGroup.Item>Fat: {recipe.total_fat} g</ListGroup.Item>
                     </ListGroup>
                     <Card.Body>
                         <Button variant="primary" className="me-2" onClick={() => handleViewRecipe("details", recipe.id)}>Details</Button>

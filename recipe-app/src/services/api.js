@@ -126,7 +126,7 @@ export const createIngredient = async (formData) => {
   });
 
   if (!response.ok) {
-    throw new Error('Failed to create recipe');
+    throw new Error('Failed to create ingredient');
   }
   return response.json();
 }

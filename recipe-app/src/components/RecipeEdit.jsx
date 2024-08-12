@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Modal, Button, Form, Row, Col, Image } from 'react-bootstrap';
-import { fetchIngredients, updateRecipe, deleteRecipeIngredient, createRecipeIngredient, fetchRecipe, updateRecipeIngredient } from '../services/api';
+import { updateRecipe, deleteRecipeIngredient, createRecipeIngredient, fetchRecipe, updateRecipeIngredient } from '../services/api';
 import { useDropzone } from 'react-dropzone';
 
 const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
@@ -31,6 +31,7 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
                 console.error('There was an error fetching the recipe!', error);
             });
     }, [recipeId]);
+
 
 
     const handleQuantityChange = (id, newQuantity) => {
@@ -69,6 +70,7 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
 
     const handleNewIngredientIngredientChange = (e) => {
         setNewRecipeIngredientIngredient(e.target.value);
+        setIsDropdownOpen(false);
     };
     const handleNewIngredientQuantityChange = (e) => {
         setNewRecipeIngredientQuantity(e.target.value);
@@ -135,6 +137,8 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
         return ingredients.find(ingredient => ingredient.id === id);
     };
 
+
+
     const handleSave = async () => {
         const formData = new FormData();
         formData.append('name', recipeName);
@@ -185,6 +189,8 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
     if (!recipe) {
         return <div>Loading...</div>;
     }
+
+    
 
     const summary = calculateSummary();
 
@@ -269,6 +275,7 @@ const RecipeEdit = ({ show, handleClose, recipeId, onSave, ingredients }) => {
                                 name="ingredient"
                                 value={newRecipeIngredientIngredient}
                                 onChange={handleNewIngredientIngredientChange}
+
                             >
                                 <option value="">Select Ingredient</option>
                                 {filteredIngredients.map(ingredient => (
