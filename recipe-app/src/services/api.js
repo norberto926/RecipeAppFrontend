@@ -153,3 +153,29 @@ export const updateIngredient = async (ingredientId, formData) => {
   return response.json();
 };
 
+
+export const createUser = async (formData) => {
+  const response = await fetch(`${API_BASE_URL}/user/register/`, {
+    method: 'PUT',
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error('Failed to register user');
+  }
+  return response.json();
+};
+
+export const loginUser = async (formData) => {
+  const response = await fetch(`${API_BASE_URL}/user/login/`, {
+    method: 'PUT',
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error('Failed to register user');
+  }
+  return response.json();
+};
+
+
+
+
