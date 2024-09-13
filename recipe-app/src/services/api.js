@@ -156,7 +156,7 @@ export const updateIngredient = async (ingredientId, formData) => {
 
 export const createUser = async (formData) => {
   const response = await fetch(`${API_BASE_URL}/user/register/`, {
-    method: 'PUT',
+    method: 'POST',
     body: formData,
   });
   if (!response.ok) {
