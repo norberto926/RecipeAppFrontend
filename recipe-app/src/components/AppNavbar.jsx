@@ -20,6 +20,7 @@ const AppNavbar = () => {
 
   const handleClose = () => {
     setShowLogin(false)
+    setShowRegister(false)
   }
 
 

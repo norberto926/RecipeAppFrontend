@@ -31,7 +31,7 @@ const Register = ({show, handleClose}) => {
         try {
             const formData = new FormData();
             formData.append("email", email)
-            formData.append("username", username)
+            formData.append("user_name", username)
             formData.append("password", password)
 
             const newUser = await createUser(formData)
