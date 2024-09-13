@@ -173,7 +173,6 @@ export const loginUser = async (formData) => {
   if (!response.ok) {
     throw new Error('Failed to login user');
   }
-  console.log(response.json())
   return response.json();
 
 };
