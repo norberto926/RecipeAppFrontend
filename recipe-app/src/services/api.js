@@ -166,7 +166,7 @@ export const createUser = async (formData) => {
 };
 
 export const loginUser = async (formData) => {
-  const response = await fetch(`${API_BASE_URL}/user/login/`, {
+  const response = await fetch(`${API_BASE_URL}/token/`, {
     method: 'POST',
     body: formData,
   });
