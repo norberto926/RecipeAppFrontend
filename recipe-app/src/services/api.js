@@ -167,13 +167,15 @@ export const createUser = async (formData) => {
 
 export const loginUser = async (formData) => {
   const response = await fetch(`${API_BASE_URL}/user/login/`, {
-    method: 'PUT',
+    method: 'POST',
     body: formData,
   });
   if (!response.ok) {
-    throw new Error('Failed to register user');
+    throw new Error('Failed to login user');
   }
+  console.log(response.json())
   return response.json();
+
 };
 
 
