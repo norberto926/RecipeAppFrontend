@@ -39,7 +39,7 @@ const AppNavbar = () => {
       </Navbar.Collapse>
     </Navbar>
     {showLogin&& <Login show={showLogin} handleClose={handleClose}/>}
-    {showRegister&& <Register show={showRegister} handleClose={handleClose}/>}
+    {showRegister&& <Register show={showRegister} handleClose={handleClose} showLogin={setShowLogin}/>}
     </>
   );
 };

@@ -3,7 +3,7 @@ import { Modal, Button, Form} from 'react-bootstrap';
 import { createUser, loginUser } from '../services/api';
 
 
-const Register = ({show, handleClose}) => {
+const Register = ({show, handleClose, showLogin}) => {
     
     const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
@@ -35,16 +35,12 @@ const Register = ({show, handleClose}) => {
             formData.append("password", password)
 
             const newUser = await createUser(formData)
-            
-           
-            const loginData= new FormData()
-            loginData.append("email", email)
-            loginData.append("password", password)
-            loginUser(loginData)
-          
 
+            showLogin(true)
 
             handleClose()
+
+
         }  catch (error) {
             console.error('Failed to register user', error)
         }

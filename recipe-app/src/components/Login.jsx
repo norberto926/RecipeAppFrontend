@@ -3,7 +3,7 @@ import { Modal, Button, Form} from 'react-bootstrap';
 import { loginUser } from '../services/api';
 
 
-const Login = ({show, handleClose}) => {
+const Login = ({show, handleClose, showLogin}) => {
     
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
