@@ -21,9 +21,22 @@ const Login = ({show, handleClose}) => {
         setPassword(e.target.value)
     }
 
-    const handleLogin = () => {
-        
+    const handleLogin = async () => {
+        try {
+            const formData = new FormData();
+            formData.append("email", email)
+            formData.append("password", password)
+
+            const user = await loginUser(formData)
+
+            console.log('user is logged in')
+    
+            handleClose()
+        }  catch (error) {
+            console.error('Failed to register user', error)
+        }
     }
+
 
 
 

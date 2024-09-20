@@ -34,6 +34,7 @@ const AppNavbar = () => {
           <Nav.Link as={Link} to="/recipes">Recipes</Nav.Link>
           <Nav.Link as={Link} to="/ingredients">Ingredients</Nav.Link>
           <Button variant="primary" onClick={handleShowRegister}>Sign up</Button>
+          <Button variant="primary" onClick={handleShowLogin}>Sign in</Button>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
