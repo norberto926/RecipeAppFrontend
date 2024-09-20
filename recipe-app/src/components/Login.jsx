@@ -1,5 +1,6 @@
 import { useState} from 'react';
 import { Modal, Button, Form} from 'react-bootstrap';
+import { loginUser } from '../services/api';
 
 
 const Login = ({show, handleClose}) => {
