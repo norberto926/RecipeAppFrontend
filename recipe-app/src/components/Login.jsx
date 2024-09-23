@@ -1,12 +1,17 @@
-import { useState} from 'react';
+import { useState, useContext} from 'react';
 import { Modal, Button, Form} from 'react-bootstrap';
 import { loginUser } from '../services/api';
+import { useJwt, decodeToken} from "react-jwt"
+import { UserContext } from '../services/UserContext';
 
 
 const Login = ({show, handleClose, showLogin}) => {
     
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [decodedToken, setDecodedToken] = useState(null);
+
+    const { setUserId } = useContext(UserContext);
 
     const handleGoogleLogin = () => {
         
@@ -28,15 +33,23 @@ const Login = ({show, handleClose, showLogin}) => {
             formData.append("email", email)
             formData.append("password", password)
 
-            const user = await loginUser(formData)
+            const userTokens = await loginUser(formData)
 
-            console.log('user is logged in')
-    
+            if (userTokens && userTokens.access) {
+                const decoded = decodeToken(userTokens.access);
+
+                if (decoded && decoded.id) {
+                    setUserId(decoded.id)
+                }
+                    
+            }
+
             handleClose()
         }  catch (error) {
-            console.error('Failed to register user', error)
+            console.error('Failed to login user', error)
         }
     }
+
 
 
 
