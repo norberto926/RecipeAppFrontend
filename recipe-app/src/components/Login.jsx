@@ -11,12 +11,14 @@ const Login = ({show, handleClose, showLogin}) => {
     const [password, setPassword] = useState("")
     const [decodedToken, setDecodedToken] = useState(null);
 
-    const { setUserId } = useContext(UserContext);
+    const { userId } = useContext(UserContext);
 
     const handleGoogleLogin = () => {
         
 
     }
+
+    
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value)
