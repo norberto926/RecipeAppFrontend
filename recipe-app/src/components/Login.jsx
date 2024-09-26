@@ -42,6 +42,7 @@ const Login = ({show, handleClose, showLogin}) => {
 
                 if (decoded && decoded.id) {
                     setUserId(decoded.id)
+                    console.log("User ID set in context:", decoded.id);
                 }
                     
             }
