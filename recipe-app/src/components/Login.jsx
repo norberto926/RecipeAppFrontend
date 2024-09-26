@@ -11,7 +11,7 @@ const Login = ({show, handleClose, showLogin}) => {
     const [password, setPassword] = useState("")
     const [decodedToken, setDecodedToken] = useState(null);
 
-    const { userId } = useContext(UserContext);
+    const { setUserId } = useContext(UserContext);
 
     const handleGoogleLogin = () => {
         
