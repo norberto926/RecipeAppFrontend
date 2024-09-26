@@ -42,8 +42,8 @@ const Login = ({show, handleClose, showLogin}) => {
 
                 console.log(decoded)
 
-                if (decoded && decoded.id) {
-                    setUserId(decoded.id)
+                if (decoded && decoded.user_id) {
+                    setUserId(decoded.user_id)
                     console.log("User ID set in context:", decoded.id);
                 }
                 else {
