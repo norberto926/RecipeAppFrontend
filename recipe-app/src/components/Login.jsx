@@ -40,9 +40,14 @@ const Login = ({show, handleClose, showLogin}) => {
             if (userTokens && userTokens.access) {
                 const decoded = decodeToken(userTokens.access);
 
+                console.log(decoded)
+
                 if (decoded && decoded.id) {
                     setUserId(decoded.id)
                     console.log("User ID set in context:", decoded.id);
+                }
+                else {
+                    console.log("Failed to decode token")
                 }
                     
             }
