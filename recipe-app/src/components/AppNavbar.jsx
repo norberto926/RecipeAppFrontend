@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Navbar, Nav, Button} from 'react-bootstrap';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect} from 'react';
 import Login from './Login';
 import Register from './Register';
 import { UserContext } from '../services/UserContext';
@@ -12,6 +12,10 @@ const AppNavbar = () => {
   const [showRegister, setShowRegister] =  useState(false)
 
   const { userId } = useContext(UserContext);
+
+  useEffect(() => {
+    console.log("AppNavbar - Current userId:", userId);  // Log the current userId
+  }, [userId]);
 
   const handleShowLogin = () => {
     setShowLogin(true);
